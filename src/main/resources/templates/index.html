@@ -1,10 +1,171 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+
+ .login {
+    width: 500px;
+    margin: auto;
+    text-align: center;
+}
+
+.head {
+    width:500px;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 3px dotted blue;
+}
+#search_head{
+   width: auto;
+}
+.panel {
+    width: 1000px;
+    border: 3px solid red;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.table{
+	display: grid;
+	grid-template-rows: 1fr;
+    border : 3px dotted black;
+}
+.table_head{
+    display: grid;
+    grid-template-columns: 3fr 1fr 3fr 1fr 4fr 2fr 2fr 1fr;
+	border:3px solid rgb(97, 46, 46);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.row{
+    display: grid;
+    grid-template-columns: 3fr 1fr 3fr 1fr 4fr 2fr 2fr 1fr;
+	border:3px solid rgb(97, 46, 46);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.cell {
+    display: grid;
+    padding: 3px;
+}
+.search_text{
+    margin-left: 30px;
+    margin-right: 50px;
+}
+#subject_search_btn{
+    position: absolute;
+    left: 50px;
+    right: -100px;
+}
+.head_row{
+    display: grid;
+    grid-template-columns: 5fr 5fr 3fr;
+    max-height: 25px;
+    margin-bottom: 5px;
+}
+</style>
 <body>
- <h1> ADMIN</h1>
+<div class="login" sec:authorize="isAnonymous()">
+
+    <h1>수강신청 시스템</h1>
+
+    <a th:href="@{~/members/login}">
+    <button class="login_button">로그인</button>
+    </a>
+</div>
+
+<div class="wrap2" sec:authorize="isAuthenticated()" >
+    <div>
+        <div id="student_panel" class="panel"> <!--학번 이름 및 자기 정보-->
+            <div id="student_head" class="head">
+                <p>학생 기초정보
+                    <span th:text="${nickName}+ '님'"></span>
+                    <a href="/members/logout">
+                        <button class="logout_btn" type="submit" value="submit">로그 아웃</button> <!--TODO 로그아웃 버튼 -> 로그인 페이지로 이동-->
+                    </a>
+
+                    <a href="/members/myPage">
+                        <button class="mypage_btn" >마이 페이지</button> <!--TODO 마이 페이지로 이동-->
+
+                    </a>
+
+
+            </div>
+            <div id="student_main_panel" class="main">
+                <p align="center">학번:
+                    <span th:text="' '+${loginId}"> </span> <!-- TODO 로그인 한 정보를 가져와서 채우기-->
+                </p>
+                <p align="center">이름:
+                    <span th:text="' '+${nickName}" > </span> <!--TODO 로그인 한 정보를 가져와서 채우기-->
+            </div>
+
+
+        </div>
+        <div id="search_panel" class="panel"> <!-- 과목 검색 총 main-->
+            <div id="search_head" class="head"> <!--과목 검색 내용 -> 서버로 전송해 데베 내용과 비교하여 table을 구성-->
+                <!--TODO 검색시 헤드의 내용을 데베 서버로 전송-->
+                <div class="head_row">
+                    <span class="search_text">학과 <input type="text" name="학과" class="serach_input" size=15/></span>
+                    <span class="search_text">학년 <input type="text" name="학년" class="search_input" size=5/></span>
+                    <span class="search_text">교수명 <input type="text" name="교수명" class="search_input" size=8/></span>
+                </div>
+                <div class="head_row">
+                    <span class="search_text">과목명 <input type="text" name="과목명" class="search_input" size=15/></span>
+                    <span class="search_text">과목번호 <input type="text" name="과목번호" class="search_input" size="10"/><span> - </span>
+                        <input type="text" name="과목번호" class="search_input" size="3"/></span>
+                </div>
+                <input id="subject_saerch_btn" type="submit" value="검색" >
+            </div>
+            <div id = "search_main" class = "main">
+                <div class="table">
+                    <div class="table_head">
+                        <span class="cell col1">학과</span>
+                        <span class="cell col2">학년</span>
+                        <span class="cell col3">과목번호</span>
+                        <span class="cell col4">분반</span>
+                        <span class="cell col5">과목명</span>
+                        <span class="cell col6">교수명</span>
+                        <span class="cell col7">강의 시간</span>
+                        <span class="cell col8"></span>
+                    </div>
+                    <!--데이터베이스에서 정보 읽어 row로 출력-->
+                    <div class="row">
+                        <span class="cell col1">컴퓨터융합학부</span>
+                        <span class="cell col2">3</span>
+                        <span class="cell col3">20210</span>
+                        <span class="cell col4">00</span>
+                        <span class="cell col5">데이터베이스</span>
+                        <span class="cell col6">이규철</span>
+                        <span class="cell col7">강의 시간</span>
+                        <span class="cell col8"><button>신청</button></span>
+                    </div>
+                    <div class="row">
+                        <span class="cell col1">컴퓨터융합학부</span>
+                        <span class="cell col2">3</span>
+                        <span class="cell col3">20301</span>
+                        <span class="cell col4">01</span>
+                        <span class="cell col5">웹프로그래밍</span>
+                        <span class="cell col6">황정화</span>
+                        <span class="cell col7">강의 시간</span>
+                        <span class="cell col8"><button>신청</button></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
 </body>
 </html>
