@@ -33,7 +33,7 @@ public class Member implements UserDetails {  //멤버엔터티
 
     private String email; //이메일
 
-    private LocalDateTime regDate=LocalDateTime.now();
+    private LocalDateTime regDate=LocalDateTime.now();  //학생 생성 시각
 
     private Long grade;  //학년
 
@@ -44,7 +44,8 @@ public class Member implements UserDetails {  //멤버엔터티
     @Enumerated(EnumType.STRING)
     private Role authority;   // 회원의 등급(학생 or 관리자)
 
-
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<LectureApply> lectureApplyList=new ArrayList<>();
 
 
     public static Member createMember(String loginId,String loginPw,String nickName,Role authority,String email,Long grade,Long currentCredits){   //학생 생성(member 인스턴스 생성)
@@ -60,11 +61,12 @@ public class Member implements UserDetails {  //멤버엔터티
         return member;
     }
 
-    public static Member createAdmin(String loginId,String email, String loginPw,Role authority){ //관리자 생성(관리자 인스턴스)
+    public static Member createAdmin(String loginId,String email, String loginPw,String nickName,Role authority){ //관리자 생성(관리자 인스턴스)
         Member member=new Member();
         member.loginId=loginId;
         member.email=email;
         member.loginPw=loginPw;
+        member.nickName=nickName;
         member.authority=authority;
 
         return member;
@@ -116,6 +118,8 @@ public class Member implements UserDetails {  //멤버엔터티
     public void setAuthority(Role authority){
         this.authority=authority;
     }
+
+
 
 
 
