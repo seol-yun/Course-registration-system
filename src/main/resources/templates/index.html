@@ -68,6 +68,11 @@ th,td{
     max-height: 25px;
     margin-bottom: 5px;
 }
+
+.search_btn{
+    margin-left:1300px;
+
+}
 </style>
 <body>
 <div class="login" sec:authorize="isAnonymous()">
@@ -109,17 +114,26 @@ th,td{
         <div id="search_panel" class="panel"> <!-- 과목 검색 총 main-->
             <div id="search_head" class="head"> <!--과목 검색 내용 -> 서버로 전송해 데베 내용과 비교하여 table을 구성-->
                 <!--TODO 검색시 헤드의 내용을 데베 서버로 전송-->
-                <div class="head_row">
-                    <span class="search_text">학과 <input type="text" name="학과" class="serach_input" size=15/></span>
-                    <span class="search_text">학년 <input type="text" name="학년" class="search_input" size=5/></span>
-                    <span class="search_text">교수명 <input type="text" name="교수명" class="search_input" size=8/></span>
-                </div>
-                <div class="head_row">
-                    <span class="search_text">과목명 <input type="text" name="과목명" class="search_input" size=15/></span>
-                    <span class="search_text">과목번호 <input type="text" name="과목번호" class="search_input" size="10"/><span> - </span>
-                        <input type="text" name="과목번호" class="search_input" size="3"/></span>
-                </div>
-                <input id="subject_saerch_btn" type="submit" value="검색" >
+                <form th:action="@{~/}" method="GET">
+                    <div class="head_row">
+                        <span class="search_text">학과 <input type="text" name="department" class="serach_input" size=15/></span>
+                        <span class="search_text">학년 <input type="text" name="forGrade" class="search_input" size=5/></span>
+                        <span class="search_text">교수명 <input type="text" name="professorName" class="search_input" size=8/></span>
+
+                    </div>
+                    <div class="head_row">
+                        <span class="search_text">과목명 <input type="text" name="subject" class="search_input" size=15/></span>
+                        <span class="search_text">과목번호 <input type="text" name="subjectNumber" class="search_input" size="10"/>
+
+                    </div>
+                    <button class="search_btn" id="subject_saerch_btn" type="submit"  >검색</button>
+
+                </form>
+            </div>
+            <div id="apply_head" class="head"><!--과목번호+분반을 통해 바로 신청가능-->
+                <span class="search_text">과목번호 <input type="text" name="과목번호" class="search_input" size="10"/><span> - </span>
+                <input type="text" name="과목번호" class="search_input" size="3"/></span>
+                <input id="subject_direct_apply_btn" type="submit" value="신청">
             </div>
             <div id = "search_main" class = "main">
                 <table>

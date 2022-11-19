@@ -161,6 +161,34 @@ public class Datainit {
             );
             lectureRepository.save(l5);
 
+            Lecture l6= Lecture.makeLecture(
+                    "컴퓨터융합학부",
+                    Long.valueOf(4),
+                    Long.valueOf(3),
+                    "정보보호",
+                    "1214-4014",
+                    "01",
+                    "홍길동",
+                    Long.valueOf(5),
+                    Long.valueOf(0)
+
+            );
+            lectureRepository.save(l6);
+
+            Lecture l7= Lecture.makeLecture(
+                    "컴퓨터융합학부",
+                    Long.valueOf(3),
+                    Long.valueOf(3),
+                    "데이터베이스 설계",
+                    "1214-4999",
+                    "00",
+                    "이규철",
+                    Long.valueOf(5),
+                    Long.valueOf(0)
+
+            );
+            lectureRepository.save(l7);
+
         }
 
 
