@@ -16,10 +16,23 @@ public class LectureService {
 
     private final LectureRepository lectureRepository;
 
-    public List<Lecture> getAllLectures(){
+    public List<Lecture> getAllLectures(){ //모든 강의가 포함된 강의 리스트를 출력
         List<Lecture> lectureList=lectureRepository.findAll();
 
         return lectureList;
+    }
+
+    public Lecture getLecture(Long lectureId){  //강의의 pk인 lectureId로 강의를 찾도록 함
+        Optional<Lecture> findLecture=lectureRepository.findById(lectureId);
+
+        findLecture.orElseThrow(
+                ()->new NoSuchElementException("해당 강의는 존재하지 않습니다.")  //lectureId로 강의를 찾으려할 때 해당되는 강의가 없을 때 예외처리
+        );
+
+        Lecture lecture=findLecture.get();
+
+        return lecture;
+
     }
 
     public List<Lecture> findListBySearchKeyword(String department,String forGrade,String professorName,String subject,String subjectNumber){ //검색 조건에 따른 강의 찾기

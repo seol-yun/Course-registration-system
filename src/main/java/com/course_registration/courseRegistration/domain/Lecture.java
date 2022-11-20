@@ -59,6 +59,10 @@ public class Lecture {
         return lecture;
     }
 
+    public void setCurrentNum(){  //현재 수강인원 설정
+        this.currentNum+=1;
+
+    }
 
 
 

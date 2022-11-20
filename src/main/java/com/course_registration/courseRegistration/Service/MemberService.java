@@ -1,6 +1,7 @@
 package com.course_registration.courseRegistration.Service;
 
 import com.course_registration.courseRegistration.Dao.MemberRepository;
+import com.course_registration.courseRegistration.domain.LectureApply;
 import com.course_registration.courseRegistration.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -28,9 +30,16 @@ public class MemberService implements UserDetailsService {
 
         Optional<Member> memberOption=memberRepository.findByLoginId(loginId);
         memberOption.orElseThrow(
-                ()-> new IllegalStateException("존재하지 않는 회원입니다.")
+                ()-> new IllegalStateException("존재하지 않는 회원입니다.")  //회원이 존재하지 않을 경우 예외처리
         );
         return memberOption.get();
+
+    }
+
+    public List<LectureApply> LectureApplyListByMember(Member member){  //
+        List<LectureApply> lectureApplyList=member.getLectureApplyList();
+
+        return lectureApplyList;
 
     }
 

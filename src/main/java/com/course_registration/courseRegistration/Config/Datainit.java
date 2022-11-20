@@ -62,6 +62,7 @@ public class Datainit {
                     Role.MEMBER,
                     "wnsghks4104@naver.com",
                     Long.valueOf(4),
+                    "컴퓨터융합학부",
                     Long.valueOf(0)
 
             );
@@ -74,6 +75,7 @@ public class Datainit {
                     Role.MEMBER,
                     "answk1025@naver.com",
                     Long.valueOf(2),
+                    "컴퓨터융합학부",
                     Long.valueOf(0)
 
             );
@@ -86,10 +88,50 @@ public class Datainit {
                     Role.MEMBER,
                     "201902695@o.cnu.ac.kr",
                     Long.valueOf(3),
+                    "컴퓨터융합학부",
                     Long.valueOf(0)
 
             );
             memberRepository.save(s3);
+
+            Member s4=Member.createMember(
+                    "201902700",
+                    bCryptPasswordEncoder.encode("123"),
+                    "설치",
+                    Role.MEMBER,
+                    "201902703@o.cnu.ac.kr",
+                    Long.valueOf(2),
+                    "컴퓨터융합학부",
+                    Long.valueOf(0)
+
+            );
+            memberRepository.save(s4);
+
+            Member s5=Member.createMember(
+                    "201902696",
+                    bCryptPasswordEncoder.encode("aaa123"),
+                    "박상인",
+                    Role.MEMBER,
+                    "201902696@o.cnu.ac.kr",
+                    Long.valueOf(4),
+                    "기계공학과",
+                    Long.valueOf(0)
+
+            );
+            memberRepository.save(s5);
+
+            Member s6=Member.createMember(
+                    "201702740",
+                    bCryptPasswordEncoder.encode("ccc123"),
+                    "홍길동",
+                    Role.MEMBER,
+                    "201702740@o.cnu.ac.kr",
+                    Long.valueOf(4),
+                    "컴퓨터융합학부",
+                    Long.valueOf(0)
+
+            );
+            memberRepository.save(s6);
 
             Lecture l1= Lecture.makeLecture(
                     "컴퓨터융합학부",

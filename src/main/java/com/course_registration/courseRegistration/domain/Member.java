@@ -37,6 +37,8 @@ public class Member implements UserDetails {  //멤버엔터티
 
     private Long grade;  //학년
 
+    private String department;//학과
+
     private Long currentCredits; //현재 수강 학점
 
 
@@ -48,7 +50,7 @@ public class Member implements UserDetails {  //멤버엔터티
     private List<LectureApply> lectureApplyList=new ArrayList<>();
 
 
-    public static Member createMember(String loginId,String loginPw,String nickName,Role authority,String email,Long grade,Long currentCredits){   //학생 생성(member 인스턴스 생성)
+    public static Member createMember(String loginId,String loginPw,String nickName,Role authority,String email,Long grade,String department,Long currentCredits){   //학생 생성(member 인스턴스 생성)
         Member member=new Member();
         member.loginId=loginId;
         member.loginPw=loginPw;
@@ -56,6 +58,7 @@ public class Member implements UserDetails {  //멤버엔터티
         member.authority=authority;
         member.email=email;
         member.grade=grade;
+        member.department=department;
         member.currentCredits=currentCredits;
 
         return member;
@@ -115,8 +118,8 @@ public class Member implements UserDetails {  //멤버엔터티
         return isEnabled;
     }
 
-    public void setAuthority(Role authority){
-        this.authority=authority;
+    public void setCurrentCredits(Lecture lecture){
+        this.currentCredits+=lecture.getCredit();
     }
 
 
