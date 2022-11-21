@@ -3,6 +3,8 @@ package com.course_registration.courseRegistration.Service;
 
 import com.course_registration.courseRegistration.Dao.LectureRepository;
 import com.course_registration.courseRegistration.domain.Lecture;
+import com.course_registration.courseRegistration.domain.LectureApply;
+import com.course_registration.courseRegistration.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,4 +112,23 @@ public class LectureService {
 
         return lecture;
     }
+
+    public List<Lecture> findLectureListByMember(Member member){
+
+        List<Lecture> lectureList=new ArrayList<>();
+
+        List<LectureApply> lectureApplyList=member.getLectureApplyList();
+
+
+
+        for(int i=0;i<lectureApplyList.size();i++){
+            Lecture findLecture=findBySubjectNumAndClassNum(lectureApplyList.get(i).getSubjectNumber(),lectureApplyList.get(i).getClassNum());
+            lectureList.add(findLecture);
+
+        }
+
+        return lectureList;
+
+    }
+
 }

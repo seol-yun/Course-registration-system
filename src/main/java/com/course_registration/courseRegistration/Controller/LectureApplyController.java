@@ -77,10 +77,26 @@ public class LectureApplyController {
 
                 out.flush();
             }
-
-
-
     }
+
+    @PostMapping("/members/applyHistory/cancel/{lectureId}")
+    public String doCancelLectureApply(Model model,Principal principal,@PathVariable(name="lectureId")Long lectureId){
+
+        Lecture lecture=lectureService.getLecture(lectureId);
+
+        Member member=memberService.findByLoginId(principal.getName());
+
+        lectureApplyService.deleteApplyLecture(lecture,member);
+
+        List<Lecture> lectureList=lectureService.findLectureListByMember(member);
+
+        model.addAttribute("nickName",member.getNickName());
+        model.addAttribute("loginId",member.getLoginId());
+        model.addAttribute("lectureList",lectureList);
+
+        return "applyHistory";
+    }
+
 
 
 }

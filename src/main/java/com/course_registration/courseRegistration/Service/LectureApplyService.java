@@ -41,7 +41,7 @@ public class LectureApplyService {
     }
 
     @Transactional
-    public void doLectureApplyByCheckCondition( Lecture lecture, Member member, List<LectureApply> lectureApplyList,PrintWriter out) {
+    public void doLectureApplyByCheckCondition( Lecture lecture, Member member, List<LectureApply> lectureApplyList,PrintWriter out) { //강의 수강 신청이 이루어지는 메소드
 
 
         if((lecture.getDepartment().equals(member.getDepartment()))&&(lecture.getForGrade()==member.getGrade())) { //강의의 대상과 부합할 경우
@@ -63,7 +63,7 @@ public class LectureApplyService {
                         if (i == lectureApplyList.size() - 1) {
                            saveLectureApply(lecture, member);
 
-                            out.println("<script>alert('수강신청이 되었습니다'); history.go(-1); </script>");
+                            out.println("<script>alert('수강신청이 되었습니다.'); history.go(-1); </script>");
 
                             out.flush();
 
@@ -73,7 +73,7 @@ public class LectureApplyService {
                 } else {
                     saveLectureApply(lecture, member);
 
-                    out.println("<script>alert('수강신청이 되었습니다'); history.go(-1); </script>");
+                    out.println("<script>alert('수강신청이 되었습니다.'); history.go(-1); </script>");
 
                     out.flush();
                 }
@@ -98,6 +98,25 @@ public class LectureApplyService {
             out.println("<script>alert('학과와 대상 학년을 확인해주시기 바랍니다.'); history.go(-1); </script>");
 
             out.flush();
+        }
+    }
+
+    @Transactional
+    public void deleteApplyLecture(Lecture lecture,Member member){
+        List<LectureApply> lectureApplyList=lecture.getLectureApplyList();
+
+        for(int i=0;i<lectureApplyList.size();i++){
+            if(lectureApplyList.get(i).getMember()==member){
+                LectureApply lectureApply=lectureApplyList.get(i);
+
+                lectureApplyRepository.delete(lectureApply);
+
+                member.cancelLectureCurrentCredits(lecture);
+
+                lecture.cancelLectureCurrentNum();
+
+                break;
+            }
         }
     }
 

@@ -23,7 +23,7 @@ public class Member implements UserDetails {  //멤버엔터티
     @Id
     @Column(name="memberId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;   //식별번호(PK)
+    private Long memberId;   //식별자
 
     private String loginId; //학번
 
@@ -122,7 +122,9 @@ public class Member implements UserDetails {  //멤버엔터티
         this.currentCredits+=lecture.getCredit();
     }
 
-
+    public void cancelLectureCurrentCredits(Lecture lecture){
+        this.currentCredits=this.currentCredits- lecture.getCredit();
+    }
 
 
 

@@ -17,7 +17,7 @@ public class Lecture {
     @Id
     @Column(name="lectureId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lectureId;  //PK
+    private Long lectureId;  //식별자
 
     private String department; // 학과
 
@@ -63,6 +63,11 @@ public class Lecture {
         this.currentNum+=1;
 
     }
+
+    public void cancelLectureCurrentNum(){
+        this.currentNum-=1;
+    }
+
 
 
 

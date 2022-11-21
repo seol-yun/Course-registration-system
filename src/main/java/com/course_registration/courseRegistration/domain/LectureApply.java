@@ -13,7 +13,7 @@ public class LectureApply {
     @Id
     @Column(name="lectureApplyId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long lectureApplyId;
+    private Long lectureApplyId;  //식별자
 
     private String subjectNumber; //과목번호
 
