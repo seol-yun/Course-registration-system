@@ -231,6 +231,20 @@ public class Datainit {
             );
             lectureRepository.save(l7);
 
+            Lecture l8= Lecture.makeLecture(
+                    "컴퓨터융합학부",
+                    Long.valueOf(3),
+                    Long.valueOf(2),
+                    "IT영어2",
+                    "1214-3030",
+                    "00",
+                    "이민선",
+                    Long.valueOf(1),
+                    Long.valueOf(0)
+
+            );
+            lectureRepository.save(l8);
+
         }
 
 

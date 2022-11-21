@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.PrintWriter;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -91,5 +92,22 @@ public class LectureService {
         }
         return findList;
 
+    }
+
+    public Lecture findBySubjectNumAndClassNum(String subjectNumber, String classNum){ //과목번호와 분반을 통해 강의를 찾을 수 있도록 함
+        List<Lecture> lectureList=getAllLectures();
+
+        Lecture lecture=null;
+
+        for(int i=0;i<lectureList.size();i++){
+            if((lectureList.get(i).getSubjectNumber().equals(subjectNumber))&&(lectureList.get(i).getClassNum().equals(classNum))){
+
+                lecture=lectureList.get(i);
+                break;
+            }
+        }
+
+
+        return lecture;
     }
 }

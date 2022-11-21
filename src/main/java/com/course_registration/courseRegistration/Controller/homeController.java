@@ -31,15 +31,11 @@ public class homeController {
 
             Member member=memberService.findByLoginId(loginId);
 
-           lectureService.getAllLectures();
-
             List<Lecture> lectureList=lectureService.findListBySearchKeyword(department,forGrade,professorName,subject,subjectNumber);
 
             model.addAttribute("nickName",member.getNickName());  //index 페이지로 현재 로그인한 학생의 이름 전달
             model.addAttribute("loginId",member.getLoginId()); //index 페이지로 현재 로그인한 학생의 학번 전달
             model.addAttribute("lectureList",lectureList);
-
-
         }
         return "index";
 

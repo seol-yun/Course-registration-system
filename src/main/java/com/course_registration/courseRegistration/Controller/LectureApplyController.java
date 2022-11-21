@@ -11,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.List;
@@ -26,71 +28,59 @@ public class LectureApplyController {
     private final LectureApplyService lectureApplyService;
 
 
-    @PostMapping("/members/applyLecture/{lectureId}")   //수강 신청
-    public String doLectureApply(@PathVariable(name="lectureId")Long lectureId, Model model, Principal principal, HttpServletResponse response){
+    @PostMapping("/members/applyLecture/{lectureId}")   //신청 버튼으로 수강 신청
+    public void doLectureApply(@PathVariable(name = "lectureId") Long lectureId, Principal principal, HttpServletResponse response) throws Exception {
 
-        try{
-            Member member=memberService.findByLoginId(principal.getName());
+            Member member = memberService.findByLoginId(principal.getName());
 
-            Lecture lecture=lectureService.getLecture(lectureId);
+            List<LectureApply> lectureApplyList = memberService.LectureApplyListByMember(member);
 
-            List<LectureApply> lectureApplyList=memberService.LectureApplyListByMember(member);
+            Lecture lecture = lectureService.getLecture(lectureId);
 
             response.setContentType("text/html; charset=euc-kr");
 
             PrintWriter out = response.getWriter();
 
-            if((lecture.getDepartment().equals(member.getDepartment()))&&(lecture.getForGrade()==member.getGrade())) { //강의의 대상과 부합할 경우
+            lectureApplyService.doLectureApplyByCheckCondition(lecture, member, lectureApplyList,out);
 
 
-                if ((member.getCurrentCredits() + lecture.getCredit() <= 9) && (lecture.getCurrentNum() + 1 <= lecture.getMaxNum())) { //최대학점을 초과하지 않고 정원을 초과하지 않을 경우
-
-                    if (lectureApplyList.size() != 0) {
-                        for (int i = 0; i < lectureApplyList.size(); i++) {  //그전에 신청한 강의 중 같은 강의가 있다면 신청할 수 없도록 함
-                            if (lectureApplyList.get(i).getLecture().getSubject().equals(lecture.getSubject())) {
-
-                                out.println("<script>alert('같은 강의를 중복되어 신청할 수 없습니다.'); history.go(-1); </script>");
-
-                                out.flush();
-                                break;
-
-                            }
-
-                            if (i == lectureApplyList.size() - 1) {
-                                lectureApplyService.saveLectureApply(lecture, member);
-                                break;
-                            }
-                        }
-                    } else {
-                        lectureApplyService.saveLectureApply(lecture, member);
-                    }
-                } else {
-                    if (member.getCurrentCredits() + lecture.getCredit() > 9) {
-
-                        out.println("<script>alert('최대 9학점을 넘을 수 없습니다.'); history.go(-1); </script>");
-
-                        out.flush();
-                    }
-                    if (lecture.getCurrentNum() + 1 > lecture.getMaxNum()) {
 
 
-                        out.println("<script>alert('정원이 초과되어 신청할 수 없습니다.'); history.go(-1); </script>");
+    }
 
-                        out.flush();
-                    }
+    @PostMapping("/members/applyBySubjectNum") //과목번호로 수강신청
+    public void doApplyBySubjectNum(Principal principal, @RequestParam(name = "subjectNumber", defaultValue = "") String subjectNumber, @RequestParam(name = "classNum", defaultValue = "") String classNum, HttpServletResponse response) throws Exception{
+
+            Member member = memberService.findByLoginId(principal.getName());
+
+            List<LectureApply> lectureApplyList = memberService.LectureApplyListByMember(member);
+
+            response.setContentType("text/html; charset=euc-kr");
+
+            PrintWriter out = response.getWriter();
+
+            if ((!subjectNumber.equals("")) && (!classNum.equals(""))) {
+                Lecture lecture = lectureService.findBySubjectNumAndClassNum(subjectNumber, classNum);
+
+
+                if(lecture!=null){
+                    lectureApplyService.doLectureApplyByCheckCondition(lecture, member, lectureApplyList,out);
                 }
+                else{
+                    out.println("<script>alert('과목번호와 분반을 정확하게 입력해주시기 바랍니다.'); history.go(-1); </script>");
 
+                    out.flush();
+                }
             }
-            else{  //강의 대상에 부합하지 않을 경우
-                out.println("<script>alert('학과와 대상 학년을 확인해주시기 바랍니다.'); history.go(-1); </script>");
+            else{
+                out.println("<script>alert('과목번호와 분반을 정확하게 입력해주시기 바랍니다.'); history.go(-1); </script>");
 
                 out.flush();
             }
-        }
-        catch(Exception e){ //수강 신청 시에 오류가 발생하면 해당 오류를 확인할 수 있도록 하고 다시 수강신청 하기 전 페이지로 돌아가도록 함
-            model.addAttribute("error_msg",e.getMessage());
-            return "index";
-        }
-        return "redirect:/";
+
+
+
     }
+
+
 }

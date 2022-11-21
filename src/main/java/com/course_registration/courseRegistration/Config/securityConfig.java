@@ -29,7 +29,7 @@ public class securityConfig {
 
                 .authorizeRequests(authorize ->authorize
                         .mvcMatchers("/members/login").anonymous() //URL이 간소화될수있도록함,  회원가입하는 url, 어나니머스는 로그인이 되지 않은 사람도 해당 페이지를 들어갈수 있도록함
-                        .mvcMatchers("/members/applyLecture/**").authenticated()
+                        .mvcMatchers("/members/applyLecture/**","/members/applyBySubjectNum").authenticated()
                         .mvcMatchers("/").permitAll()
 
                         .anyRequest()
