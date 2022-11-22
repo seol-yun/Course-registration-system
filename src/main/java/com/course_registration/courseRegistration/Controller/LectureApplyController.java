@@ -79,7 +79,7 @@ public class LectureApplyController {
             }
     }
 
-    @PostMapping("/members/applyHistory/cancel/{lectureId}")
+    @PostMapping("/members/applyHistory/cancel/{lectureId}")  //수강 취소
     public String doCancelLectureApply(Model model,Principal principal,@PathVariable(name="lectureId")Long lectureId){
 
         Lecture lecture=lectureService.getLecture(lectureId);
@@ -88,7 +88,7 @@ public class LectureApplyController {
 
         lectureApplyService.deleteApplyLecture(lecture,member);
 
-        List<Lecture> lectureList=lectureService.findLectureListByMember(member);
+        List<Lecture> lectureList=lectureService.findLectureListByMember(member);  //로그인한 학생이 신청한 강의 리스트
 
         model.addAttribute("nickName",member.getNickName());
         model.addAttribute("loginId",member.getLoginId());

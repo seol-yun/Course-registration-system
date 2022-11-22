@@ -30,7 +30,7 @@ public class securityConfig {
                 .authorizeRequests(authorize ->authorize
                         .mvcMatchers("/members/login").anonymous() //URL이 간소화될수있도록함,  회원가입하는 url, 어나니머스는 로그인이 되지 않은 사람도 해당 페이지를 들어갈수 있도록함
                         .mvcMatchers("/members/applyLecture/**","/members/applyBySubjectNum","/members/applyHistory","/members/applyHistory/cancel/**").authenticated()
-                        .mvcMatchers("/admin/managerPage","/admin/modifyLecture/**").hasRole("ADMIN")  //관리자 등급인 사람만 해당 페이지를 허용
+                        .mvcMatchers("/admin/managerPage","/admin/modifyLecture/**","/admin/deleteLecture/**","/admin/allowedLectureApply").hasRole("ADMIN")  //관리자 등급인 사람만 해당 페이지를 허용
                         .mvcMatchers("/").permitAll()
 
                         .anyRequest()

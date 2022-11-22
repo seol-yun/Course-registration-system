@@ -1,5 +1,6 @@
 package com.course_registration.courseRegistration.Service;
 
+import com.course_registration.courseRegistration.Config.Role;
 import com.course_registration.courseRegistration.Dao.MemberRepository;
 import com.course_registration.courseRegistration.domain.LectureApply;
 import com.course_registration.courseRegistration.domain.Member;
@@ -41,6 +42,26 @@ public class MemberService implements UserDetailsService {
 
         return lectureApplyList;
 
+    }
+
+    public List<Member> getMemberList(){  //전체 회원에 대한 리스트를 가져옴(학생 or 관리자)
+        List<Member> memberList=memberRepository.findAll();
+
+        return memberList;
+    }
+
+    public Member findAdminMember(){ //관리자 객체 리턴
+        List<Member> memberList=getMemberList();
+
+        Member findAdmin=null;
+
+        for(int i=0;i<memberList.size();i++){
+            if(memberList.get(i).getAuthority()== Role.ADMIN){
+               findAdmin=memberList.get(i);
+            }
+        }
+
+        return findAdmin;
     }
 
 

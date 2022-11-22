@@ -41,13 +41,17 @@ public class Member implements UserDetails {  //멤버엔터티
 
     private Long currentCredits; //현재 수강 학점
 
+    private LocalDateTime canApplyStartTime;  // 해당 강의에 대해 수강신청 시작시간
+
+    private LocalDateTime canApplyEndTime;   // 해당 강의에 대해 수강신청 종료시간
+
 
 
     @Enumerated(EnumType.STRING)
     private Role authority;   // 회원의 등급(학생 or 관리자)
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<LectureApply> lectureApplyList=new ArrayList<>();
+    private List<LectureApply> lectureApplyList=new ArrayList<>(); //학생이 신청한 수강신청 리스트
 
 
     public static Member createMember(String loginId,String loginPw,String nickName,Role authority,String email,Long grade,String department,Long currentCredits){   //학생 생성(member 인스턴스 생성)
@@ -120,16 +124,22 @@ public class Member implements UserDetails {  //멤버엔터티
 
     public void setCurrentCredits(Lecture lecture){
         this.currentCredits+=lecture.getCredit();
-    }
+    }  //수강신청 시 학점 반영
 
     public void updateCurrentCredits(Long credit){
         this.currentCredits=credit;
-    }
+    }  //현재 강의에 학점에 따라 수강학점 반영
 
-    public void cancelLectureCurrentCredits(Lecture lecture){
+    public void cancelLectureCurrentCredits(Lecture lecture){  //수강 취소 시 학점 반영
         this.currentCredits=this.currentCredits- lecture.getCredit();
     }
 
+    public void setCanApplyStartTime(LocalDateTime startTime){
+        this.canApplyStartTime=startTime;
+    }  //수강신청 시작시간 설정
 
+    public void setCanApplyEndTime(LocalDateTime endTime){
+        this.canApplyEndTime=endTime;
+    } //수강신청 종료시간 설정
 
 }

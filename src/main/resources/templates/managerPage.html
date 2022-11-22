@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>마이페이지</title>
-  <link rel="stylesheet" href="./manager_page.css">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -189,10 +189,10 @@ th{
 아니라는 오류문을 출력하고 -->
 <div id="subject_time_panel">
   <p class = "subject_time_panel_title">수강신청 가능 시간</p>
-  <form   method="post">
-    시작: <input type="datetime-local" name="" value="">
+  <form th:action="@{~/admin/allowedLectureApply}" method="POST">
+    시작: <input type="datetime-local" name="startTime" >
     <br>
-    종료: <input type="datetime-local" name="" value="">
+    종료: <input type="datetime-local" name="endTime" >
     <br>
     <button type="submit" name="button" class="btn btn-secondary btn-sm">저장</button>
   </form>
@@ -243,7 +243,7 @@ th{
         </td>
         <td >
           <!--todo 삭제 버튼 클릭시 현재 강의 삭제-->
-          <form th:action="@{~/admin/cancelLecture/}+${lecture.lectureId}" method="POST">
+          <form th:action="@{~/admin/deleteLecture/}+${lecture.lectureId}" method="POST">
             <button class="btn btn-secondary btn-sm lecture_cancel_btn">삭제</button>
           </form>
         </td>

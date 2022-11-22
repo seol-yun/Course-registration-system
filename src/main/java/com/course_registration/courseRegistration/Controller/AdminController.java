@@ -15,8 +15,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -25,6 +29,7 @@ public class AdminController {
 
     private final MemberService memberService;
     private final LectureService lectureService;
+
 
     @GetMapping("/admin/managerPage")  //관리자 페이지를 보여줌
     public String showManagerPage(Model model, Principal principal){
@@ -78,5 +83,44 @@ public class AdminController {
 
         return "redirect:/admin/managerPage";
     }
+
+    @PostMapping("/admin/deleteLecture/{lectureId}") //강의 삭제(폐강)
+    public String doDeleteLecture(@PathVariable(name="lectureId")Long lectureId){
+
+        Lecture lecture=lectureService.getLecture(lectureId);
+
+        lectureService.deleteLecture(lecture);
+
+
+        return "redirect:/admin/managerPage";
+
+    }
+
+    @PostMapping("/admin/allowedLectureApply")  //수강신청 가능시간 조절
+    public String doAllowedLectureApply(@RequestParam(name="startTime",defaultValue = "") String startTime, @RequestParam(name="endTime",defaultValue = "")String endTime){
+
+        List<Member> memberList=memberService.getMemberList();
+
+        DateTimeFormatter format= DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+        if((!startTime.equals(""))&&(!endTime.equals(""))){  //시작 시간과 종료 시간을 제대로 입력할 경우
+            LocalDateTime start = LocalDateTime.parse(startTime, format);
+            LocalDateTime end=LocalDateTime.parse(endTime, format);
+
+            if(start.isBefore(end)){  //시작시간이 종료시간보다 앞 시간일 경우
+
+                lectureService.setAllowedLectureApplyTime(start,end,memberList);
+            }
+            else{
+                return "redirect:/admin/managerPage";
+            }
+        }
+
+
+
+        return "redirect:/admin/managerPage";
+    }
+
+
 
 }

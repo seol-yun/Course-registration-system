@@ -1,6 +1,7 @@
 package com.course_registration.courseRegistration.Service;
 
 
+import com.course_registration.courseRegistration.Config.Role;
 import com.course_registration.courseRegistration.DTO.Lecture.LectureModifyForm;
 import com.course_registration.courseRegistration.Dao.LectureRepository;
 import com.course_registration.courseRegistration.domain.Lecture;
@@ -9,8 +10,14 @@ import com.course_registration.courseRegistration.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
+import javax.mail.internet.MimeMessage;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -19,6 +26,8 @@ import java.util.*;
 public class LectureService {
 
     private final LectureRepository lectureRepository;
+    private final JavaMailSender javaMailSender;
+    private static final String FROM_ADDRESS="wnsghks4104@gmail.com";
 
     public List<Lecture> getAllLectures(){ //모든 강의가 포함된 강의 리스트를 출력
         List<Lecture> lectureList=lectureRepository.findAll();
@@ -133,7 +142,7 @@ public class LectureService {
     }
 
     @Transactional
-    public void modifyLecture(LectureModifyForm lectureModifyForm,Lecture lecture){
+    public void modifyLecture(LectureModifyForm lectureModifyForm,Lecture lecture){  //강의 정보 수정
         lecture.modifyLecture(
                 lectureModifyForm.getDepartment(),
                 lectureModifyForm.getForGrade(),
@@ -146,10 +155,53 @@ public class LectureService {
         );
 
         List<LectureApply> lectureApplyList=lecture.getLectureApplyList();
-        for(int i=0; i<lectureApplyList.size();i++){
+        for(int i=0; i<lectureApplyList.size();i++){  //강의의 학점을 변경한 학점으로 업데이트
             lectureApplyList.get(i).getMember().updateCurrentCredits(lectureModifyForm.getCredit());
         }
 
+
+    }
+
+    @Transactional
+    public void deleteLecture(Lecture lecture){ //강의 삭제
+
+        try{
+
+            List<LectureApply> lectureApplyList=lecture.getLectureApplyList();
+
+            MimeMessage mail=javaMailSender.createMimeMessage();
+            MimeMessageHelper mailHelper = new MimeMessageHelper(mail,true,"UTF-8");
+            mailHelper.setFrom(FROM_ADDRESS);  //누가 보낼것인지
+
+            for(int i=0;i<lectureApplyList.size();i++){  //해당 강의를 수강 신청한 사람 수 만큼 각각 메일을 전송하도록 함
+
+                lectureApplyList.get(i).getMember().cancelLectureCurrentCredits(lecture);
+
+                mailHelper.setTo(lectureApplyList.get(i).getMember().getEmail());  //누가 받을 것인지
+                mailHelper.setSubject("수강신청 시스템에서 강의 폐강을 안내드립니다.");
+                mailHelper.setText(lectureApplyList.get(i).getMember().getNickName()+"님이 신청하신 "+lecture.getSubject()+" 강의가 폐강되었음을 안내드립니다.");
+                javaMailSender.send(mail); //메일 전송
+
+            }
+
+            lectureRepository.delete(lecture);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Transactional
+    public void setAllowedLectureApplyTime(LocalDateTime startTime, LocalDateTime endTime, List<Member> memberList){ //수강신청 시작시간 및 종료시간 설정
+
+        for(int i=0;i<memberList.size();i++){
+            if(memberList.get(i).getAuthority()== Role.ADMIN){  //시작시간과 종료시간 세팅
+                memberList.get(i).setCanApplyStartTime(startTime);
+                memberList.get(i).setCanApplyEndTime(endTime);
+            }
+        }
 
     }
 
