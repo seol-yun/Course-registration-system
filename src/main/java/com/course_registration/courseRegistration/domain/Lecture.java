@@ -59,14 +59,29 @@ public class Lecture {
         return lecture;
     }
 
-    public void setCurrentNum(){  //현재 수강인원 설정
+    public void setCurrentNum(){  //현재 수강인원 설정(수강신청 할 경우)
         this.currentNum+=1;
 
     }
 
-    public void cancelLectureCurrentNum(){
+
+    public void cancelLectureCurrentNum(){  //수강을 취소할 경우
         this.currentNum-=1;
     }
+
+    public void modifyLecture(String department,Long forGrade,String subjectNumber,String classNum,String subject,String professorName,Long credit,Long maxNum){ //강의 객체의 정보를 수정
+        this.department=department;
+        this.forGrade=forGrade;
+        this.subjectNumber=subjectNumber;
+        this.classNum=classNum;
+        this.subject=subject;
+        this.professorName=professorName;
+        this.credit= credit;
+        this.maxNum=maxNum;
+
+    }
+
+
 
 
 

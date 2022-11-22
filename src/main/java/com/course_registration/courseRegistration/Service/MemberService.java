@@ -36,7 +36,7 @@ public class MemberService implements UserDetailsService {
 
     }
 
-    public List<LectureApply> LectureApplyListByMember(Member member){  //
+    public List<LectureApply> LectureApplyListByMember(Member member){  //학생 객체를 받아 학생이 수강신청한 강의의 리스트를 출력
         List<LectureApply> lectureApplyList=member.getLectureApplyList();
 
         return lectureApplyList;

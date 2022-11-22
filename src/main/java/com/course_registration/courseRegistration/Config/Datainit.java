@@ -112,7 +112,7 @@ public class Datainit {
                     bCryptPasswordEncoder.encode("aaa123"),
                     "박상인",
                     Role.MEMBER,
-                    "201902696@o.cnu.ac.kr",
+                    "wnsghks4104@gmail.com",
                     Long.valueOf(4),
                     "기계공학과",
                     Long.valueOf(0)

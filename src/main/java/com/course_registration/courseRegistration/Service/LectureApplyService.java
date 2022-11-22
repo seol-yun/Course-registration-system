@@ -102,7 +102,7 @@ public class LectureApplyService {
     }
 
     @Transactional
-    public void deleteApplyLecture(Lecture lecture,Member member){
+    public void deleteApplyLecture(Lecture lecture,Member member){  //학생 객체를 받아 해당 강의에 대한 수강신청을 취소함
         List<LectureApply> lectureApplyList=lecture.getLectureApplyList();
 
         for(int i=0;i<lectureApplyList.size();i++){

@@ -1,6 +1,7 @@
 package com.course_registration.courseRegistration.Service;
 
 
+import com.course_registration.courseRegistration.DTO.Lecture.LectureModifyForm;
 import com.course_registration.courseRegistration.Dao.LectureRepository;
 import com.course_registration.courseRegistration.domain.Lecture;
 import com.course_registration.courseRegistration.domain.LectureApply;
@@ -113,7 +114,7 @@ public class LectureService {
         return lecture;
     }
 
-    public List<Lecture> findLectureListByMember(Member member){
+    public List<Lecture> findLectureListByMember(Member member){ //학생 객체를 통해 학생이 수강신청한 강의의 리스트를 리턴
 
         List<Lecture> lectureList=new ArrayList<>();
 
@@ -128,6 +129,27 @@ public class LectureService {
         }
 
         return lectureList;
+
+    }
+
+    @Transactional
+    public void modifyLecture(LectureModifyForm lectureModifyForm,Lecture lecture){
+        lecture.modifyLecture(
+                lectureModifyForm.getDepartment(),
+                lectureModifyForm.getForGrade(),
+                lectureModifyForm.getSubjectNumber(),
+                lectureModifyForm.getClassNum(),
+                lectureModifyForm.getSubject(),
+                lectureModifyForm.getProfessorName(),
+                lectureModifyForm.getCredit(),
+                lectureModifyForm.getMaxNum()
+        );
+
+        List<LectureApply> lectureApplyList=lecture.getLectureApplyList();
+        for(int i=0; i<lectureApplyList.size();i++){
+            lectureApplyList.get(i).getMember().updateCurrentCredits(lectureModifyForm.getCredit());
+        }
+
 
     }
 

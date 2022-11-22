@@ -122,6 +122,10 @@ public class Member implements UserDetails {  //멤버엔터티
         this.currentCredits+=lecture.getCredit();
     }
 
+    public void updateCurrentCredits(Long credit){
+        this.currentCredits=credit;
+    }
+
     public void cancelLectureCurrentCredits(Lecture lecture){
         this.currentCredits=this.currentCredits- lecture.getCredit();
     }
